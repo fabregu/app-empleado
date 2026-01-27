@@ -3,26 +3,28 @@
         <h2>Agregar Empleado</h2>
     </div>
 </div>
+
+<pre>{{ myForm.value | json }}</pre>
 <div class="row">
     <div class="col-lg-4">
         <h2>Formulario</h2>
-        <form action="">
+        <form [formGroup]="myForm">
             <div class="col-lg-12">
                 <mat-form-field class="example-container" [style.fontsize.px]=16>
                     <mat-label>Nombres</mat-label>
-                    <input matInput>
+                    <input matInput formControlName="nombres">
                 </mat-form-field>
             </div>
             <div class="col-lg-12">
                 <mat-form-field class="example-container" [style.fontsize.px]=16>
                     <mat-label>Correo</mat-label>
-                    <input matInput>
+                    <input matInput formControlName="correo">
                 </mat-form-field>
             </div>
             <div class="col-lg-12">
                 <mat-form-field class="example-container" [style.fontsize.px]=16>
                     <mat-label>Fecha Ingreso</mat-label>
-                    <input matInput [matDatepicker]="picker">
+                    <input matInput [matDatepicker]="picker" formControlName="fechaIngreso">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -30,24 +32,29 @@
             <div class="col-lg-12">
                 <mat-form-field class="example-container">
                     <mat-label>Telefono</mat-label>
-                    <input matInput>
+                    <input matInput formControlName="telefono">
                 </mat-form-field>
             </div>
             <div class="col-lg-12">
                 <mat-form-field class="example-container">
                     <mat-label>Estado Civil</mat-label>
-                    <mat-select>
+                    <mat-select formControlName="estadoCivil">
                         @for (estadoCivil of estadosCiviles; track estadoCivil) {
                         <mat-option [value]="estadoCivil">{{estadoCivil}}</mat-option>
                         }
                     </mat-select>
-                </mat-form-field>   
+                </mat-form-field>
             </div>
             <div class="col-lg-12">
-                Sexo
+                <mat-radio-group aria-label="Seleccione sexo" formControlName="sexo">
+                    <mat-radio-button value="Masculino" style="margin-right: 10px;">Masculino</mat-radio-button>
+                    <mat-radio-button value="Femenino">Femenino</mat-radio-button>
+                </mat-radio-group>
             </div>
+            <br>
             <div class="col-lg-12">
-                BOTONES
+                <button class="btn btn-success btn-lg float-right" type="button" style="margin-right: 10px;">Aceptar</button>
+                <button class="btn btn-secondary btn-lg float-right" type="button" routerLink="/">Cancelar</button>
             </div>
         </form>
     </div>
