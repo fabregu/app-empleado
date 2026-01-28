@@ -29,6 +29,10 @@ export class EmpleadoService {
     return this.listEmpleado.slice();
   }
 
+  agregarEmpleado(empleado: Empleado) {
+    this.listEmpleado.unshift(empleado)
+  }
+
   delete(index: number) {
     this.listEmpleado.splice(index, 1)
   }
