@@ -6,7 +6,7 @@ import { MatNativeDateModule, MatOption } from '@angular/material/core';
 import { MatSelect } from "@angular/material/select";
 import {MatRadioModule} from '@angular/material/radio';
 import { JsonPipe, CommonModule } from '@angular/common';
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Empleado } from '../../models/empleado.entity';
 import { EmpleadoService } from '../../services/empleado.service';
@@ -33,6 +33,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AddEditEmpleadoComponent {
   estadosCiviles: any[] = ['Soltero', 'Casado', 'Divorciado'];
+  idEmpleado: any;
+  accion= "Crear";
 
   myForm: FormGroup;
 
@@ -40,7 +42,8 @@ export class AddEditEmpleadoComponent {
     private fb: FormBuilder,
     private empleadoService: EmpleadoService,
     private route: Router,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private aRoute: ActivatedRoute
   ){
     this.myForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.maxLength(20)]] ,
@@ -50,6 +53,15 @@ export class AddEditEmpleadoComponent {
       estadoCivil: ['', Validators.required] ,
       sexo: ['', Validators.required] 
     });
+    //const idParam = 'id';
+    this.idEmpleado = this.aRoute.snapshot.params['id'];
+  }
+
+  ngOnInit(): void{
+    if(this.idEmpleado !== undefined) {
+      this.accion = "Editar";
+      this.esEditar();
+    }
   }
 
   guardarEmpleado() {
@@ -62,10 +74,48 @@ export class AddEditEmpleadoComponent {
       estadoCivil: this.myForm.get('estadoCivil')?.value,
       sexo: this.myForm.get('sexo')?.value
     };
+
+    if(this.idEmpleado !== undefined) {
+      this.editarEmpleado(empleado);
+    }
+    else {
+      this.agregarEmpleado(empleado);
+    }
+
     this.empleadoService.agregarEmpleado(empleado);
     this.snackbar.open('Empleado regsitrado con exito', '',
           {duration:   30000}
         );
     this.route.navigate(['/']);
   }
+
+  agregarEmpleado (empleado: Empleado) {
+    this.empleadoService.agregarEmpleado(empleado);
+    this.snackbar.open('Empleado registrado con éxito', '', {
+      duration: 3000
+    });
+    this.route.navigate(['/']);
+  }
+
+  editarEmpleado (empleado: Empleado) {
+    this.empleadoService.editarEmpleado(empleado, this.idEmpleado);
+    this.snackbar.open('Empleado actualizado con éxito', '', {
+      duration: 3000
+    });
+    this.route.navigate(['/']);
+  }
+
+  esEditar() {
+    const empleado: Empleado = this.empleadoService.getEmpleado(this.idEmpleado);
+    this.myForm.patchValue({
+      nombres: empleado.nombres,
+      correo: empleado.correo,
+      fechaIngreso: empleado.fechaIngreso,
+      telefono: empleado.telefono,
+      estadoCivil: empleado.estadoCivil,
+      sexo: empleado.sexo
+    });
+  }
+
+
 }

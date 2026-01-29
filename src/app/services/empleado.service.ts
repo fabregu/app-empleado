@@ -33,6 +33,19 @@ export class EmpleadoService {
     this.listEmpleado.unshift(empleado)
   }
 
+  getEmpleado(index: number) {
+    return this.listEmpleado[index];
+  }
+
+  editarEmpleado(empleado: Empleado, idEmpleado: number) {
+    this.listEmpleado[idEmpleado].nombres = empleado.nombres,
+    this.listEmpleado[idEmpleado].correo = empleado.correo,
+    this.listEmpleado[idEmpleado].fechaIngreso = empleado.fechaIngreso,
+    this.listEmpleado[idEmpleado].telefono = empleado.telefono,
+    this.listEmpleado[idEmpleado].sexo = empleado.sexo,
+    this.listEmpleado[idEmpleado].estadoCivil = empleado.estadoCivil
+  }
+
   delete(index: number) {
     this.listEmpleado.splice(index, 1)
   }
